@@ -1,0 +1,122 @@
+# XV6-RISCV Operating System
+
+## Overview
+This operating system (XV6-RISCV) is a simplified re-implementation of Dennis Ritchie and Ken Thompson's Unix Version 6 (V6). It is implemented for the RISC-V architecture and designed to run on QEMU. The operating system serves as a minimal yet complete system that demonstrates fundamental OS concepts. It provides hands-on insights into the core components and principles of operating system design and functionality.
+
+---
+
+## Key Features
+
+### 1. Process Management
+- Implements a priority-based round-robin scheduler for multitasking.
+- Core functionalities:
+  - Process creation (`fork`).
+  - Process termination (`exit`).
+  - Waiting for child processes (`wait`).
+- Efficient context switching between user and kernel modes.
+
+### 2. Memory Management
+- Utilizes RISC-V Sv39 paging with a three-level page table architecture.
+- Employs a buddy allocator for physical memory management.
+- Implements virtual memory with demand paging.
+- Memory protection ensures isolation between processes.
+
+### 3. File System
+- Unix-style file system with inode-based architecture.
+- Supports file operations like `open`, `read`, `write`, and `mkdir`.
+- Includes a buffer cache to improve disk I/O performance.
+- Ensures file integrity through crash recovery logging.
+
+### 4. Device Management
+- Modular driver architecture:
+  - UART driver for console I/O.
+  - VirtIO driver for disk I/O.
+- Supports buffered I/O and interrupt-driven device communication.
+
+### 5. System Calls
+- Provides a set of system calls for kernel interaction:
+  - File operations (`open`, `read`, `write`).
+  - Process control (`fork`, `exit`, `wait`).
+  - File system management (`mkdir`).
+
+### 6. Interprocess Communication
+- Implements pipes for data exchange between processes.
+- Mechanisms for process synchronization and communication.
+
+### 7. User Utilities
+- Includes essential Unix-like utilities:
+  - `cat`: Display file contents.
+  - `echo`: Print arguments to standard output.
+  - `grep`: Search for patterns in text.
+  - `ls`: List files and directories.
+  - `mkdir`: Create directories.
+  - `rm`: Remove files.
+  - `wc`: Count lines, words, and characters in files.
+  - `forktest`: Stress-test process creation limits.
+- A simple shell is provided to execute commands and scripts.
+
+---
+
+## Code Structure
+- **Kernel Code**: Handles low-level operations like process scheduling, memory management, and device drivers.
+- **User Programs**: Implements common utilities (e.g., `cat`, `ls`) and a basic shell.
+- **File System Tools**: Includes utilities for creating and managing the file system (`mkfs`).
+
+---
+
+## Development Environment
+
+- **Programming Language**: C for both kernel and user-space programs.
+- **Architecture**: RISC-V 64-bit.
+- **Build Tools**:
+  - `make` for compiling the kernel and user programs.
+  - `mkfs` for constructing the file system image.
+- **Binary Format**: ELF for user programs.
+- **Emulator**: QEMU for testing and running the operating system.
+
+---
+
+## How to Build and Run (Installing on macOS)
+
+### 1. Install Developer Tools
+```sh
+$ xcode-select --install
+```
+
+### 2. Install Homebrew
+```sh
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+### 3. Install the RISC-V Compiler Toolchain
+```sh
+$ brew tap riscv/riscv
+$ brew install riscv-tools
+```
+> **Note**: If your brew formula doesn't link into /usr/local, update your shell's configuration file (e.g., `~/.bashrc`) to include the RISC-V toolchain in the `$PATH`.
+```sh
+PATH=$PATH:/usr/local/opt/riscv-gnu-toolchain/bin
+```
+
+### 4. Install QEMU
+```sh
+$ brew install qemu
+```
+
+### 5. Build and Run
+- Navigate to the project directory (e.g., `OperatingSystem`):
+```sh
+$ cd OperatingSystem
+```
+- Build and run the OS:
+```sh
+$ make qemu
+```
+
+### 6. Quit QEMU
+- To exit QEMU, type:
+```sh
+Ctrl-a x
+```
+(Press `Ctrl` and `a` together, then press `x`.)
+
